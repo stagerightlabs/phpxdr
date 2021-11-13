@@ -8,7 +8,7 @@ This package provides an implementation of the [RFC 4506](https://datatracker.ie
 
 This package is currently in beta; the API is still subject to change.
 
-Important Note: [Quadruple-Precision Floating-Point](https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.8) numbers are not supported by this package as a native type. However, tools are provided for you to implement this in your own project should you have the need.
+Important Note: [Quadruple-Precision Floating-Point](https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.8) numbers are not supported by this package as a native type. However tools are provided for you to implement this in your own project should you have the need.
 
 ## Installation
 
