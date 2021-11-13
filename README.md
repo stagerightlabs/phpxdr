@@ -6,6 +6,8 @@
 
 This package provides an implementation of the [RFC 4506](https://datatracker.ietf.org/doc/html/rfc4506.html) External Data Representation standard.  It is built to be extensible; you can encode and decode custom data objects as well as primitive generics.
 
+This package is currently in beta; the API is still subject to change.
+
 Important Note: [Quadruple-Precision Floating-Point](https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.8) numbers are not supported by this package as a native type, but the tools are provided to allow you to implement this type in your own project, should you have the need.
 
 ## Installation
@@ -36,13 +38,17 @@ $float = $xdr->read(XDR::FLOAT); // ~3.14
 $string = $xdr->read(XDR::STRING); // 'Bad Wolf'
 ```
 
-More usage information can be found in the wiki.
+More usage information can be found in the wiki. (coming soon.)
 
 ### Testing
 
 ```bash
 ./vendor/bin/phpunit
 ```
+
+### Credits
+
+This package draws a lot of inspiration from both [zulucrypto/stellar-api](https://github.com/zulucrypto/stellar-api) and [stellar/js-xdr](https://github.com/stellar/js-xdr).
 
 ### Changelog
 
