@@ -4,11 +4,11 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/stagerightlabs/phpxdr.svg?style=flat-square)](https://packagist.org/packages/stagerightlabs/phpxdr)
 ![GitHub Actions](https://github.com/stagerightlabs/phpxdr/actions/workflows/main.yml/badge.svg)
 
-This package provides an implementation of the [RFC 4506](https://datatracker.ietf.org/doc/html/rfc4506.html) External Data Representation standard.  It is built to be extensible; you can encode and decode custom data objects as well as primitive generics.
+This package provides an implementation of the [RFC 4506](https://datatracker.ietf.org/doc/html/rfc4506.html) External Data Representation standard for PHP.  It is built to be extensible; you can encode and decode custom data objects as well as primitive generics.
 
 This package is currently in beta; the API is still subject to change.
 
-Important Note: [Quadruple-Precision Floating-Point](https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.8) numbers are not supported by this package as a native type, but the tools are provided to allow you to implement this type in your own project, should you have the need.
+Important Note: [Quadruple-Precision Floating-Point](https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.8) numbers are not supported by this package as a native type. However, tools are provided for you to implement this in your own project should you have the need.
 
 ## Installation
 
@@ -29,7 +29,7 @@ $xdr = XDR::fresh()
     ->write(3.14, XDR::FLOAT)
     ->write('Bad Wolf', XDR::STRING);
 
-$xdr->asBase64(); // AAAAKkBI9cMAAAAIQmFkIFdvbGY=
+$payload = $xdr->asBase64(); // AAAAKkBI9cMAAAAIQmFkIFdvbGY=
 
 // Decode
 $xdr = XDR::fromBase64('AAAAKkBI9cMAAAAIQmFkIFdvbGY=');
@@ -38,7 +38,7 @@ $float = $xdr->read(XDR::FLOAT); // ~3.14
 $string = $xdr->read(XDR::STRING); // 'Bad Wolf'
 ```
 
-More usage information can be found in the wiki. (coming soon.)
+More usage information can be found in the wiki (coming soon.)
 
 ### Testing
 
