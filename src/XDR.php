@@ -82,6 +82,17 @@ class XDR
     }
 
     /**
+     * Create a new XDR instance from a base 16 string.
+     *
+     * @param string $bytes
+     * @return static
+     */
+    public static function fromBase16(string $hex)
+    {
+        return new static(hex2bin($hex));
+    }
+
+    /**
      * Create a new XDR instance from a base 64 encoded string.
      *
      * @param string $buffer

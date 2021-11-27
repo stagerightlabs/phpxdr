@@ -113,6 +113,16 @@ trait Utility
      */
     public function toHex(): string
     {
+        return $this->toBase16();
+    }
+
+    /**
+     * Return the buffer as a base 16 string.
+     *
+     * @return string
+     */
+    public function toBase16(): string
+    {
         return bin2hex($this->buffer);
     }
 
@@ -156,6 +166,16 @@ trait Utility
     public function buffer(): string
     {
         return $this->buffer;
+    }
+
+    /**
+     * Allow the XDR object to be represented as a string.
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return $this->buffer();
     }
 
     /**
