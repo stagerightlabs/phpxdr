@@ -104,16 +104,6 @@ class ExampleUnion implements XdrUnion
         return null;
     }
 
-    public function getXdrValueVessel(): ?string
-    {
-        return null;
-    }
-
-    public static function getXdrTypeLength(): ?int
-    {
-        return null;
-    }
-
     public static function newFromXdr($discriminator): static
     {
         return new static($discriminator);

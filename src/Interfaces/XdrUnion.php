@@ -60,7 +60,6 @@ interface XdrUnion
     /**
      * Create a new instance of this class from XDR.
      *
-     *
      * @return static
      */
     public static function newFromXdr($discriminator): static;
