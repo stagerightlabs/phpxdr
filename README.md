@@ -38,7 +38,7 @@ $float = $xdr->read(XDR::FLOAT); // ~3.14
 $string = $xdr->read(XDR::STRING); // 'Bad Wolf'
 ```
 
-More usage information can be found in the wiki (coming soon.)
+More implementation and usage details can be [found in the wiki](https://github.com/stagerightlabs/phpxdr/wiki).
 
 ### Testing
 
