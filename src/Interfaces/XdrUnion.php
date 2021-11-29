@@ -17,7 +17,7 @@ interface XdrUnion
      *
      * @return int
      */
-    public function getXdrDiscriminator(): mixed;
+    public function getXdrDiscriminator(): int|bool|XdrEnum;
 
     /**
      * What type of discriminator is being used in this union?
