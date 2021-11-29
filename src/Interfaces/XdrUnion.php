@@ -54,16 +54,16 @@ interface XdrUnion
     /**
      * Create a new instance of this class from XDR.
      *
+     * @param int|bool|XdrEnum $discriminator
      * @return static
      */
-    public static function newFromXdr($discriminator): static;
+    public static function newFromXdr(int|bool|XdrEnum $discriminator): static;
 
     /**
-     * Allow the XDR tool to set the value of the union arm.
+     * Allow the XDR tool to set the value of the union.
      *
-     * @param $discriminator
-     * @param $value
+     * @param mixed $value
      * @return void
      */
-    public function setValueFromXdr($discriminator, $value);
+    public function setValueFromXdr(mixed $value): void;
 }

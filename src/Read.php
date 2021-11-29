@@ -441,7 +441,7 @@ trait Read
 
         // Decode the value and pass it to the vessel
         $value = $this->read($vessel->getXdrValueType(), length: $vessel->getXdrValueLength());
-        $vessel->setValueFromXdr($discriminator, $value);
+        $vessel->setValueFromXdr($value);
 
         return $vessel;
     }
