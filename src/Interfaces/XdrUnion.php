@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace StageRightLabs\PhpXdr\Interfaces;
 
+use StageRightLabs\PhpXdr\Interfaces\XdrEnum;
+
 /**
  * Allow an object to behave as an XDR union. Default values should be managed
  * by the implementing classes if they are needed.
@@ -27,14 +29,6 @@ interface XdrUnion
      * @return string
      */
     public static function getXdrDiscriminatorType(): string;
-
-    /**
-     * Determine if a value is a member of the ENUM options.
-     *
-     * @param int $discriminator
-     * @return boolean
-     */
-    public function isValidXdrDiscriminator(int $discriminator): bool;
 
     /**
      * Retrieve the selected value to be encoded as XDR bytes.

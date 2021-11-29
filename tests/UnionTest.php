@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use StageRightLabs\PhpXdr\XDR;
 use PHPUnit\Framework\TestCase;
+use StageRightLabs\PhpXdr\Interfaces\XdrEnum;
 use StageRightLabs\PhpXdr\Interfaces\XdrUnion;
 
 class UnionTest extends TestCase
@@ -70,7 +71,7 @@ class ExampleUnion implements XdrUnion
         }
     }
 
-    public function getXdrDiscriminator(): mixed
+    public function getXdrDiscriminator(): int|bool|XdrEnum
     {
         return $this->selection;
     }
@@ -78,11 +79,6 @@ class ExampleUnion implements XdrUnion
     public static function getXdrDiscriminatorType(): string
     {
         return XDR::INT;
-    }
-
-    public function isValidXdrDiscriminator(int $discriminator): bool
-    {
-        return in_array($discriminator, array_keys($this->union));
     }
 
     public function getXdrValue(): mixed

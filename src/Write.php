@@ -452,11 +452,6 @@ trait Write
             throw new InvalidArgumentException('Attempting to use an invalid value as union discriminator.');
         }
 
-        // Validate the discriminator
-        if (!$value->isValidXdrDiscriminator($value->getXdrDiscriminator())) {
-            throw new InvalidArgumentException('An invalid discriminator has been provided for a union.');
-        }
-
         // Write the discriminator
         $this->write($value->getXdrDiscriminator(), $value->getXdrDiscriminatorType());
 
