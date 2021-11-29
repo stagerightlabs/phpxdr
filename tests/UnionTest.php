@@ -101,7 +101,7 @@ class ExampleUnion implements XdrUnion
         return new static($discriminator);
     }
 
-    public function setValueFromXdr(mixed $value): void
+    public function setValueFromXdr(int|bool|XdrEnum $discriminator, mixed $value): void
     {
         $this->value = $value;
     }

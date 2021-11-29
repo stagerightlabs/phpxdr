@@ -62,8 +62,9 @@ interface XdrUnion
     /**
      * Allow the XDR tool to set the value of the union.
      *
+     * @param int|bool|XdrEnum $discriminator
      * @param mixed $value
      * @return void
      */
-    public function setValueFromXdr(mixed $value): void;
+    public function setValueFromXdr(int|bool|XdrEnum $discriminator, mixed $value): void;
 }
