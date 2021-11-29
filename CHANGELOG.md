@@ -2,6 +2,16 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.3 - 2021-11-28
+
+### Added
+
+- Added better return types to `getXdrDiscriminator()` method in the `XdrUnion` interface.
+
+### Removed
+
+- Removed the `isValidXdrDiscriminator()` method from the `XdrUnion` interface.
+
 ## 0.0.2 - 2021-11-27
 
 ### Added
