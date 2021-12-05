@@ -2,6 +2,12 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.4 - 2021-12-04
+
+### Changed
+
+- Adjusted the `XdrOptional` interface to hopefully be more intuitive.  Removed references to "evaluation" in favor of "hasValue".
+
 ## 0.0.3 - 2021-11-28
 
 ### Added

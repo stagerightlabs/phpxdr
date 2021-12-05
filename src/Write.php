@@ -506,7 +506,7 @@ trait Write
      */
     protected function writeOptional(XdrOptional $value): self
     {
-        if ($value->getXdrEvaluation()) {
+        if ($value->hasValueForXdr()) {
             $this->write(true, XDR::BOOL)
                 ->write($value->getXdrValue(), $value->getXdrValueType(), $value->getXdrValueLength());
         } else {

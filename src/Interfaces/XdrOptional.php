@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace StageRightLabs\PhpXdr\Interfaces;
 
 /**
- * Allow an object to behave as an XDR 'optional' value.
+ * Allow an object to behave as an XDR 'optional' data type.
  *
  * @package StageRightLabs\PhpXdr
  */
 interface XdrOptional
 {
     /**
-     * Run the evaluation to determine if this optional union will have a value.
+     * Is there a value to encode?
      *
      * @return bool
      */
-    public function getXdrEvaluation(): bool;
+    public function hasValueForXdr(): bool;
 
     /**
      * Retrieve the selected value to be encoded as XDR bytes.
@@ -43,9 +43,9 @@ interface XdrOptional
     /**
      * Create a new instance of this class from XDR.
      *
-     * @param bool $evaluation
+     * @param bool $hasValue
      * @param mixed $value
      * @return static
      */
-    public static function newFromXdr(bool $evaluation, mixed $value): static;
+    public static function newFromXdr(bool $hasValue, mixed $value): static;
 }

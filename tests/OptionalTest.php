@@ -73,7 +73,7 @@ class ExampleOption implements XdrOptional
         $this->value = $value;
     }
 
-    public function getXdrEvaluation(): bool
+    public function hasValueForXdr(): bool
     {
         return $this->yesNo;
     }
@@ -93,8 +93,8 @@ class ExampleOption implements XdrOptional
         return null;
     }
 
-    public static function newFromXdr(bool $evaluation, mixed $value): static
+    public static function newFromXdr(bool $hasValue, mixed $value): static
     {
-        return new static($evaluation, $value);
+        return new static($hasValue, $value);
     }
 }

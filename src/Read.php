@@ -458,7 +458,7 @@ trait Read
     }
 
     /**
-     * Decode bytes into an OPTIONAL defined by the given class.
+     * Decode bytes into an OPTIONAL DATA type defined by the given class.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.19
      * @param string $vessel
@@ -466,19 +466,19 @@ trait Read
      */
     protected function readOptional(string $vessel): XdrOptional
     {
-        // read the evaluation
-        $evaluation = $this->read(XDR::BOOL);
-        $value = null;
+        // Is there a value?
+        $hasValue = $this->read(XDR::BOOL);
 
-        if ($evaluation) {
-            $value = $this->read($vessel::getXdrValueType(), length: $vessel::getXdrValueLength());
-        }
+        // Read the value if it is present
+        $value = $hasValue
+            ? $this->read($vessel::getXdrValueType(), length: $vessel::getXdrValueLength())
+            : null;
 
-        return $vessel::newFromXdr($evaluation, $value);
+        return $vessel::newFromXdr($hasValue, $value);
     }
 
     /**
-     * Decode bytes into a custom typedef object. The heavy lifting is done
+     * Decode bytes into a custom TYPEDEF object. The heavy lifting is done
      * by the implementing class.
      *
      * @param string $vessel
