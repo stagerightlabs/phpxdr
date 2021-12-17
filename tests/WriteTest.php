@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use InvalidArgumentException;
 use StageRightLabs\PhpXdr\XDR;
 use PHPUnit\Framework\TestCase;
 
@@ -109,5 +110,21 @@ class WriteTest extends TestCase
     {
         $xdr = XDR::fresh()->write(14531089, XDR::INT);
         $this->assertEquals('00ddba11', $xdr->toHex());
+    }
+
+    /** @test */
+    public function it_accepts_valid_custom_class_names_as_types()
+    {
+        $enum = new ExampleEnum(ExampleEnum::FOO);
+        $xdr = XDR::fresh()->write($enum, ExampleEnum::class);
+
+        $this->assertEquals('0000000a', $xdr->toHex());
+    }
+
+    /** @test */
+    public function it_rejects_invalid_custom_class_names_as_types()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        XDR::fresh()->write(new StdClass, StdClass::class);
     }
 }

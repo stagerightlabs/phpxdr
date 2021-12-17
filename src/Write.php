@@ -34,16 +34,17 @@ trait Write
         }
 
         // Can we infer that this is an enum?
-        if ($value instanceof XdrEnum && is_null($type)) {
+        if ($value instanceof XdrEnum) {
             return $this->writeEnum($value);
         }
 
         // Can we infer that this is a fixed array?
-        if ($value instanceof XdrArray && $value->getXdrFixedCount() && is_null($type)) {
+        if ($value instanceof XdrArray && $value->getXdrFixedCount()) {
             return $this->writeArrayFixed($value, $value->getXdrFixedCount());
         }
 
         // Can we infer that this is a variable length array?
+        if ($value instanceof XdrArray && !$value->getXdrFixedCount()) {
             return $this->writeArrayVariable($value, $value->getXdrFixedCount());
         }
 
