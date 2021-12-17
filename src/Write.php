@@ -44,8 +44,7 @@ trait Write
         }
 
         // Can we infer that this is a variable length array?
-        if ($value instanceof XdrArray && !$value->getXdrFixedCount() && is_null($type)) {
-            return $this->writeArrayFixed($value, $value->getXdrFixedCount());
+            return $this->writeArrayVariable($value, $value->getXdrFixedCount());
         }
 
         // Can we infer that this is a struct?
