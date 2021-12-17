@@ -2,6 +2,12 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.6 - 2021-12-16
+
+### Changed
+
+- Allow union values to be XDR::VOID (aka null.)
+
 ## 0.0.5 - 2021-12-16
 
 ### Changed
