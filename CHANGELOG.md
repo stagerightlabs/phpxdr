@@ -2,6 +2,13 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.5 - 2021-12-16
+
+### Changed
+
+- Fix bug preventing the encoding of variable arrays.
+- Allow valid class names to be accepted as XDR types. The values are inspected to determine their true xdr types.
+
 ## 0.0.4 - 2021-12-04
 
 ### Changed
