@@ -113,16 +113,7 @@ class WriteTest extends TestCase
     }
 
     /** @test */
-    public function it_accepts_valid_custom_class_names_as_types()
-    {
-        $enum = new ExampleEnum(ExampleEnum::FOO);
-        $xdr = XDR::fresh()->write($enum, ExampleEnum::class);
-
-        $this->assertEquals('0000000a', $xdr->toHex());
-    }
-
-    /** @test */
-    public function it_rejects_invalid_custom_class_names_as_types()
+    public function it_rejects_non_qualified_instance_class_names_as_types()
     {
         $this->expectException(InvalidArgumentException::class);
         XDR::fresh()->write(new StdClass, StdClass::class);

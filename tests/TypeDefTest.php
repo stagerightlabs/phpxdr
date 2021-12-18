@@ -24,6 +24,15 @@ class TypeDefTest extends TestCase
     }
 
     /** @test */
+    public function it_accepts_a_typedef_instance_class_name_as_a_type_parameter()
+    {
+        $bigInt = ExampleInt256Typedef::of('3402823669209384634633746074317682114570');
+        $xdr = XDR::fresh()->write($bigInt, ExampleInt256Typedef::class);
+        $this->assertEquals(32, $xdr->length());
+        $this->assertEquals('0000000000000000000000000000000a0000000000000000000000000000000a', $xdr->toHex());
+    }
+
+    /** @test */
     public function it_decodes_typedef_objects()
     {
         $int256 = XDR::fromHex('0000000000000000000000000000000a0000000000000000000000000000000a')

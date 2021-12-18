@@ -27,6 +27,15 @@ class ArrayVariableTest extends TestCase
     }
 
     /** @test */
+    public function it_accepts_a_variable_array_instance_class_name_as_a_type_parameter()
+    {
+        $arr = new ExampleArrayVariable([1, 2]);
+        $bytes = XDR::fresh()->write($arr, ExampleArrayVariable::class)->buffer();
+        $this->assertEquals(12, strlen($bytes));
+        $this->assertEquals('000000020000000100000002', bin2hex($bytes));
+    }
+
+    /** @test */
     public function it_decodes_variable_length_arrays()
     {
         $arr = XDR::fromHex('000000020000000100000002')->read(XDR::ARRAY_VARIABLE, ExampleArrayVariable::class);

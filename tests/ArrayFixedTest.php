@@ -18,6 +18,15 @@ class ArrayFixedTest extends TestCase
     }
 
     /** @test */
+    public function it_accepts_a_fixed_array_instance_class_name_as_a_type_parameter()
+    {
+        $arr = new ExampleArrayFixed([1, 2]);
+        $bytes = XDR::fresh()->write($arr, ExampleArrayFixed::class)->buffer();
+        $this->assertEquals(8, strlen($bytes));
+        $this->assertEquals('0000000100000002', bin2hex($bytes));
+    }
+
+    /** @test */
     public function it_encodes_fixed_length_arrays_using_the_shorter_syntax()
     {
         $arr = new ExampleArrayFixed([1, 2]);

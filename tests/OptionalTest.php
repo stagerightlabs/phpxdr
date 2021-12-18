@@ -37,6 +37,15 @@ class EncodingOptionalTest extends TestCase
     }
 
     /** @test */
+    public function it_accepts_an_optional_instance_class_name_as_a_type_parameter()
+    {
+        $yes = new ExampleOption(true, 2);
+        $optional = XDR::fresh()->write($yes, ExampleOption::class)->buffer();
+        $this->assertEquals(8, strlen($optional));
+        $this->assertEquals('0000000100000002', bin2hex($optional));
+    }
+
+    /** @test */
     public function it_decodes_optional_values()
     {
         $optional = XDR::fromHex('0000000100000002')->read(XDR::OPTIONAL, ExampleOption::class);

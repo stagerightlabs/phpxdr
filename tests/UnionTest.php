@@ -28,6 +28,15 @@ class UnionTest extends TestCase
     }
 
     /** @test */
+    public function it_accepts_a_union_instance_class_name_as_a_type_parameter()
+    {
+        $union = new ExampleUnion(20, 2);
+        $bytes = XDR::fresh()->write($union, ExampleUnion::class)->buffer();
+        $this->assertEquals(8, strlen($bytes));
+        $this->assertEquals('0000001400000002', bin2hex($bytes));
+    }
+
+    /** @test */
     public function it_decodes_unions()
     {
         $union = XDR::fromHex('0000001400000002')->read(XDR::UNION, ExampleUnion::class);

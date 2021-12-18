@@ -18,6 +18,15 @@ class EnumTest extends TestCase
     }
 
     /** @test */
+    public function it_accepts_an_enum_instance_class_name_as_a_type_parameter()
+    {
+        $enum = new ExampleEnum(ExampleEnum::BAR);
+        $bytes = XDR::fresh()->write($enum, ExampleEnum::class)->buffer();
+        $this->assertEquals(4, strlen($bytes));
+        $this->assertEquals('00000014', bin2hex($bytes));
+    }
+
+    /** @test */
     public function it_encodes_enums_with_shorter_syntax()
     {
         $enum = new ExampleEnum(ExampleEnum::BAR);

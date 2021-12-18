@@ -27,6 +27,15 @@ class StructTest extends TestCase
     }
 
     /** @test */
+    public function it_accepts_a_struct_instance_class_name_as_a_type_parameter()
+    {
+        $struct = new ExampleStruct;
+        $xdr = XDR::fresh()->write($struct, ExampleStruct::class);
+        $this->assertEquals(4, $xdr->length());
+        $this->assertEquals('00000010', $xdr->toHex());
+    }
+
+    /** @test */
     public function it_decodes_structs()
     {
         $struct = XDR::fromHex('00000010')->read(XDR::STRUCT, ExampleStruct::class);
