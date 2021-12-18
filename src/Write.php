@@ -49,7 +49,7 @@ trait Write
         }
 
         // Can we infer that this is a struct?
-        if ($value instanceof XdrStruct && is_null($type)) {
+        if ($value instanceof XdrStruct) {
             return $this->writeStruct($value);
         }
 
