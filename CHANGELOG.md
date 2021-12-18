@@ -2,6 +2,16 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.7 - 2021-12-18
+
+### Added
+
+- Added [phpstan](https://phpstan.org/) as a dev dependency.
+
+### Changed
+
+- The fix in 0.0.5 for accepting class names as type indicators did not quite go far enough. More test coverage has been added and some further adjustments made to hopefully fix this issue for real.
+
 ## 0.0.6 - 2021-12-16
 
 ### Changed
