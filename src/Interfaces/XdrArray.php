@@ -14,7 +14,7 @@ interface XdrArray
     /**
      * Get the array that will be encoded into XDR bytes.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getXdrArray(): array;
 
@@ -46,7 +46,7 @@ interface XdrArray
     /**
      * Create a new instance of this class from XDR.
      *
-     * @param array $value
+     * @param mixed[] $arr
      * @return static
      */
     public static function newFromXdr(array $arr): static;

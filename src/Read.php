@@ -125,7 +125,6 @@ trait Read
 
             default:
                 throw new InvalidArgumentException('Attempting to read an unknown XDR type.');
-                break;
         }
     }
 
@@ -177,18 +176,18 @@ trait Read
             ? unpack('l', strrev($bytes))
             : unpack('l', $bytes);
 
-        return $this->firstOrFail($decoded);
+        return intval($this->firstOrFail($decoded));
     }
 
     /**
      * Decode bytes into an UINT.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.2
-     * @return integer
+     * @return int
      */
     protected function readUint(): int
     {
-        return $this->firstOrFail(unpack('N', $this->scan(XDR::UINT_BYTE_LENGTH)));
+        return intval($this->firstOrFail(unpack('N', $this->scan(XDR::UINT_BYTE_LENGTH))));
     }
 
     /**
@@ -196,8 +195,7 @@ trait Read
      * $vessel value to allow for a nicer read() api.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.3
-     * @param string $bytes
-     * @param string $vessel
+     * @param string|null $vessel
      * @return XdrEnum
      */
     protected function readEnum($vessel): XdrEnum
@@ -217,7 +215,6 @@ trait Read
      * Decode bytes into a BOOL value.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.4
-     * @param string $bytes
      * @return boolean
      */
     protected function readBool(): bool
@@ -239,7 +236,7 @@ trait Read
             ? unpack('q', strrev($bytes))
             : unpack('q', $bytes);
 
-        return self::firstOrFail($decoded);
+        return intval(self::firstOrFail($decoded));
     }
 
     /**
@@ -250,7 +247,7 @@ trait Read
      */
     protected function readHyperUint(): int
     {
-        return self::firstOrFail(unpack('J', $this->scan(XDR::HYPER_UINT_BYTE_LENGTH)));
+        return intval(self::firstOrFail(unpack('J', $this->scan(XDR::HYPER_UINT_BYTE_LENGTH))));
     }
 
     /**
@@ -261,7 +258,7 @@ trait Read
      */
     protected function readFloat(): float
     {
-        return self::firstOrFail(unpack('G', $this->scan(XDR::FLOAT_BYTE_LENGTH)));
+        return floatval(self::firstOrFail(unpack('G', $this->scan(XDR::FLOAT_BYTE_LENGTH))));
     }
 
     /**
@@ -272,7 +269,7 @@ trait Read
      */
     protected function readDouble(): float
     {
-        return self::firstOrFail(unpack('E', $this->scan(XDR::DOUBLE_BYTE_LENGTH)));
+        return floatval(self::firstOrFail(unpack('E', $this->scan(XDR::DOUBLE_BYTE_LENGTH))));
     }
 
     /**
@@ -347,13 +344,16 @@ trait Read
      * Decode bytes into an ARRAY_FIXED, and array with a fixed element count.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.12
-     * @param string $vessel
+     * @param string|null $vessel
      * @param int|null $length
      * @return XdrArray
      */
-    protected function readArrayFixed(string $vessel, int $length = null): XdrArray
+    protected function readArrayFixed(string|null $vessel, int $length = null): XdrArray
     {
         // Ensure we are working with an XdrArray vessel
+        if (is_null($vessel)) {
+            throw new InvalidArgumentException("No XdrArray interface has been provided.");
+        }
         if ($this->isNotInstanceOf($vessel, XdrArray::class)) {
             throw new InvalidArgumentException("Class '{$vessel}' does not implement the XdrArray interface.");
         }
@@ -378,12 +378,15 @@ trait Read
      * Decode bytes into an ARRAY_VARIABLE, an array with a variable element count.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.13
-     * @param string $vessel
+     * @param string|null $vessel
      * @return XdrArray
      */
-    protected function readArrayVariable(string $vessel): XdrArray
+    protected function readArrayVariable(string|null $vessel): XdrArray
     {
         // Ensure we are working with an XdrArray vessel
+        if (is_null($vessel)) {
+            throw new InvalidArgumentException("No XdrArray interface has been provided.");
+        }
         if ($this->isNotInstanceOf($vessel, XdrArray::class)) {
             throw new InvalidArgumentException("Class '{$vessel}' does not implement the XdrArray interface.");
         }
@@ -405,12 +408,15 @@ trait Read
      * Decode bytes into a STRUCT defined by the given class.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.14
-     * @param string $vessel
+     * @param string|null $vessel
      * @return XdrStruct
      */
-    protected function readStruct(string $vessel): XdrStruct
+    protected function readStruct(string|null $vessel): XdrStruct
     {
         // Ensure we are working with an XdrStruct vessel
+        if (is_null($vessel)) {
+            throw new InvalidArgumentException("No XdrStruct interface has been provided.");
+        }
         if (self::isNotInstanceOf($vessel, XdrStruct::class)) {
             throw new InvalidArgumentException("Class '{$vessel}' does not implement the XdrStruct interface.");
         }
@@ -423,12 +429,15 @@ trait Read
      * Decode bytes into a UNION defined by the given class.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.15
-     * @param string $vessel
+     * @param string|null $vessel
      * @return XdrUnion
      */
-    protected function readUnion(string $vessel): XdrUnion
+    protected function readUnion(string|null $vessel): XdrUnion
     {
         // Ensure we are working with an XdrUnion vessel
+        if (is_null($vessel)) {
+            throw new InvalidArgumentException("No XdrUnion interface has been provided.");
+        }
         if (self::isNotInstanceOf($vessel, XdrUnion::class)) {
             throw new InvalidArgumentException("Class '{$vessel}' does not implement the XdrUnion interface.");
         }
@@ -461,11 +470,19 @@ trait Read
      * Decode bytes into an OPTIONAL DATA type defined by the given class.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.19
-     * @param string $vessel
+     * @param string|null $vessel
      * @return XdrOptional
      */
-    protected function readOptional(string $vessel): XdrOptional
+    protected function readOptional(string|null $vessel): XdrOptional
     {
+        // Ensure we are working with an XdrOptional vessel
+        if (is_null($vessel)) {
+            throw new InvalidArgumentException("No XdrOptional interface has been provided.");
+        }
+        if (self::isNotInstanceOf($vessel, XdrOptional::class)) {
+            throw new InvalidArgumentException("Class '{$vessel}' does not implement the XdrOptional interface.");
+        }
+
         // Is there a value?
         $hasValue = $this->read(XDR::BOOL);
 
@@ -481,11 +498,19 @@ trait Read
      * Decode bytes into a custom TYPEDEF object. The heavy lifting is done
      * by the implementing class.
      *
-     * @param string $vessel
+     * @param string|null $vessel
      * @return XdrTypedef
      */
-    protected function readTypedef($vessel): XdrTypedef
+    protected function readTypedef(string|null $vessel): XdrTypedef
     {
+        // Ensure we are working with an XdrTypedef vessel
+        if (is_null($vessel)) {
+            throw new InvalidArgumentException("No XdrTypedef interface has been provided.");
+        }
+        if (self::isNotInstanceOf($vessel, XdrTypedef::class)) {
+            throw new InvalidArgumentException("Class '{$vessel}' does not implement the XdrTypedef interface.");
+        }
+
         return $vessel::newFromXdr($this);
     }
 }

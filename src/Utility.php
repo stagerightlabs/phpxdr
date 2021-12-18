@@ -17,6 +17,8 @@ trait Utility
      *
      * @param string $bytes
      * @param int|null $length
+     * @param string|null $char
+     * @param int $direction
      * @return string
      */
     public static function pad($bytes, $length = null, $char = null, $direction = STR_PAD_RIGHT)
@@ -89,7 +91,13 @@ trait Utility
             return true;
         }
 
-        return in_array($interface, class_implements($class));
+        $implemented = class_implements($class);
+
+        if (!$implemented) {
+            return false;
+        }
+
+        return in_array($interface, $implemented);
     }
 
     /**
@@ -139,13 +147,13 @@ trait Utility
     /**
      * Retrieve the first element of an array or throw an exception.
      *
-     * @param array|bool|null $arr
+     * @param mixed[]|bool|null $arr
      * @param string $message
      * @return mixed
      */
     protected function firstOrFail($arr, $message = 'Could not read decoded value'): mixed
     {
-        if ($arr === false || $arr === null) {
+        if (is_bool($arr) || $arr === null) {
             throw new UnexpectedValueException($message);
         }
 
@@ -214,7 +222,7 @@ trait Utility
             $index = 0;
         }
 
-        $this->cursor = $index ?? 0;
+        $this->cursor = $index;
     }
 
     /**

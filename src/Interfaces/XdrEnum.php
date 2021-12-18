@@ -21,7 +21,7 @@ interface XdrEnum
     /**
      * Create a new instance of this class from XDR.
      *
-     * @param array $value
+     * @param int $value
      * @return static
      */
     public static function newFromXdr(int $value): static;

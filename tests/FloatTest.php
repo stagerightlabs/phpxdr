@@ -18,13 +18,6 @@ class FloatTest extends TestCase
         $this->assertEquals($expected, bin2hex($bytes));
     }
 
-    /** @test */
-    public function it_rejects_unqualified_values()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        XDR::fresh()->write(1, XDR::FLOAT);
-    }
-
     /**
      * @test
      * @dataProvider decodingData

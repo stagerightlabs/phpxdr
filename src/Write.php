@@ -11,7 +11,6 @@ use StageRightLabs\PhpXdr\Interfaces\XdrUnion;
 use StageRightLabs\PhpXdr\Interfaces\XdrStruct;
 use StageRightLabs\PhpXdr\Interfaces\XdrTypedef;
 use StageRightLabs\PhpXdr\Interfaces\XdrOptional;
-use phpDocumentor\Reflection\DocBlock\Tags\InvalidTag;
 
 /**
  * The XDR encoder methods.
@@ -45,7 +44,7 @@ trait Write
 
         // Can we infer that this is a variable length array?
         if ($value instanceof XdrArray && !$value->getXdrFixedCount()) {
-            return $this->writeArrayVariable($value, $value->getXdrFixedCount());
+            return $this->writeArrayVariable($value);
         }
 
         // Can we infer that this is a struct?
@@ -71,62 +70,40 @@ trait Write
         // Otherwise assume it is a known type.
         switch ($type) {
             case XDR::INT:
-                return $this->writeInt($value);
+                return $this->writeInt(intval($value));
 
             case XDR::UINT:
-                return $this->writeUint($value);
-
-            case XDR::ENUM:
-                return $this->writeEnum($value);
+                return $this->writeUint(intval($value));
 
             case XDR::BOOL:
-                return $this->writeBool($value);
+                return $this->writeBool(boolval($value));
 
             case XDR::HYPER_INT:
-                return $this->writeHyperInt($value);
+                return $this->writeHyperInt(intval($value));
 
             case XDR::HYPER_UINT:
-                return $this->writeHyperUint($value);
+                return $this->writeHyperUint(intval($value));
 
             case XDR::FLOAT:
-                return $this->writeFloat($value);
+                return $this->writeFloat(floatval($value));
 
             case XDR::DOUBLE:
-                return $this->writeDouble($value);
+                return $this->writeDouble(floatval($value));
 
             case XDR::OPAQUE_FIXED:
-                return $this->writeOpaqueFixed($value, $length);
+                return $this->writeOpaqueFixed(strval($value), $length);
 
             case XDR::OPAQUE_VARIABLE:
-                return  $this->writeOpaqueVariable($value);
+                return  $this->writeOpaqueVariable(strval($value));
 
             case XDR::STRING:
-                return $this->writeString($value);
-
-            case XDR::ARRAY_FIXED:
-                return $this->writeArrayFixed($value, $length);
-
-            case XDR::ARRAY_VARIABLE:
-                return $this->writeArrayVariable($value);
-
-            case XDR::STRUCT:
-                return $this->writeStruct($value);
-
-            case XDR::UNION:
-                return $this->writeUnion($value);
+                return $this->writeString(strval($value));
 
             case XDR::VOID:
                 return $this->writeVoid();
 
-            case XDR::OPTIONAL:
-                return $this->writeOptional($value);
-
-            case XDR::TYPEDEF:
-                return $this->writeTypedef($value);
-
             default:
                 throw new InvalidArgumentException('Attempting to write an unknown XDR type.');
-                break;
         }
     }
 
@@ -149,7 +126,7 @@ trait Write
      * @param int $value
      * @return self
      */
-    protected function writeInt($value): self
+    protected function writeInt(int $value): self
     {
         if ($value > 2147483647 || $value < -2147483647) {
             throw new InvalidArgumentException('Signed integer out of range.');
@@ -170,7 +147,7 @@ trait Write
      * @param int $value
      * @return self
      */
-    protected function writeUint($value): self
+    protected function writeUint(int $value): self
     {
         if ($value < 0 || $value > XDR::MAX_LENGTH) {
             throw new InvalidArgumentException('Unsigned integer out of range.');
@@ -205,7 +182,7 @@ trait Write
      * @param bool $value
      * @return self
      */
-    protected function writeBool($value): self
+    protected function writeBool(bool $value): self
     {
         return $value ? $this->writeUint(1) : $this->writeUint(0);
     }
@@ -218,7 +195,7 @@ trait Write
      * @param int $value
      * @return self
      */
-    protected function writeHyperInt($value): self
+    protected function writeHyperInt(int $value): self
     {
         // These errors probably won't be thrown due to
         if ($value > PHP_INT_MAX) {
@@ -244,7 +221,7 @@ trait Write
      * @param int $value
      * @return self
      */
-    protected function writeHyperUInt($value): self
+    protected function writeHyperUInt(int $value): self
     {
         if ($value > PHP_INT_MAX) {
             throw new InvalidArgumentException('Attempting to encode a hyper unsigned integer that is larger than PHP_INT_MAX.');
@@ -266,7 +243,7 @@ trait Write
      * @param float $value
      * @return self
      */
-    protected function writeFloat($value): self
+    protected function writeFloat(float $value): self
     {
         if (!is_float($value)) {
             throw new InvalidArgumentException('Attempting to encode a non-float value as a float.');
@@ -288,7 +265,7 @@ trait Write
      * @param float $value
      * @return self
      */
-    protected function writeDouble($value): self
+    protected function writeDouble(float $value): self
     {
         if (!is_float($value)) {
             throw new InvalidArgumentException('Attempting to encode a non-float value as a float.');
@@ -313,7 +290,7 @@ trait Write
      * @param int|null $length
      * @return self
      */
-    protected function writeOpaqueFixed($value, $length = null): self
+    protected function writeOpaqueFixed(string $value, int|null $length = null): self
     {
         if (!$length) {
             throw new InvalidArgumentException('You must specify a length to encode a fixed opaque value.');
@@ -337,7 +314,7 @@ trait Write
      * @param string $value
      * @return self
      */
-    protected function writeOpaqueVariable($value): self
+    protected function writeOpaqueVariable(string $value): self
     {
         if (strlen($value) > XDR::MAX_LENGTH) {
             throw new InvalidArgumentException('Attempting to encode an variable opaque value that is longer than allowed by the spec.');
@@ -356,7 +333,7 @@ trait Write
      * @param string $value
      * @return self
      */
-    protected function writeString($value): self
+    protected function writeString(string $value): self
     {
         if (strlen($value) > XDR::MAX_LENGTH) {
             throw new InvalidArgumentException('Attempting to encode a string that is longer than allowed by the spec.');
@@ -472,7 +449,7 @@ trait Write
      * @param string $type
      * @return boolean
      */
-    protected function isInvalidUnionDiscriminator($type): bool
+    protected function isInvalidUnionDiscriminator(string $type): bool
     {
         if (in_array($type, [XDR::INT, XDR::UINT, XDR::BOOL])) {
             return false;
@@ -489,10 +466,9 @@ trait Write
      * Consider a 'void' value to be an empty string.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.16
-     * @param mixed $void
      * @return self
      */
-    protected function writeVoid($void = null): self
+    protected function writeVoid(): self
     {
         $this->append('');
 

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace StageRightLabs\PhpXdr;
 
+use UnexpectedValueException;
+
 /**
  * A tool for encoding and decoding XDR byte strings.
  */
-class XDR
+final class XDR
 {
     use Read;
     use Write;
@@ -45,6 +47,7 @@ class XDR
 
     protected string $buffer = '';
     protected int $cursor = 0;
+    protected int $count = 0;
 
     /**
      * Instantiate a new instance of the XDR class.
@@ -71,25 +74,29 @@ class XDR
     }
 
     /**
-     * Create a new XDR instance from a hex string.
+     * An alias of the fromBase16() method.
      *
-     * @param string $bytes
      * @return static
      */
     public static function fromHex(string $hex)
     {
-        return new static(hex2bin($hex));
+        return self::fromBase16($hex);
     }
 
     /**
      * Create a new XDR instance from a base 16 string.
      *
-     * @param string $bytes
      * @return static
      */
     public static function fromBase16(string $hex)
     {
-        return new static(hex2bin($hex));
+        $bin = hex2bin($hex);
+
+        if (is_bool($bin)) {
+            throw new UnexpectedValueException("Invalid base16 string: '{$hex}'");
+        }
+
+        return new static($bin);
     }
 
     /**
