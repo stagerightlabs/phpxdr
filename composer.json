@@ -2,7 +2,8 @@
     "name": "stagerightlabs/phpxdr",
     "description": "Encode and Decode XDR strings with PHP",
     "keywords": [
-        "XDR"
+        "XDR",
+        "RFC-4506"
     ],
     "homepage": "https://github.com/stagerightlabs/phpxdr",
     "license": "Apache-2.0",
