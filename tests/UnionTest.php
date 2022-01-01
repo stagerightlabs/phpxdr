@@ -59,12 +59,6 @@ class ExampleUnion implements XdrUnion
 {
     const DEFAULT = 20;
 
-    protected $arms = [
-        10 => XDR::STRING,
-        20 => XDR::INT,
-        30 => XDR::FLOAT,
-    ];
-
     public function __construct(
         public ?int $selection = 20,
         public mixed $value = null
@@ -74,6 +68,15 @@ class ExampleUnion implements XdrUnion
         if ($value) {
             $this->value = $value;
         }
+    }
+
+    public static function getXdrArms(): array
+    {
+        return [
+            10 => XDR::STRING,
+            20 => XDR::INT,
+            30 => XDR::FLOAT,
+        ];
     }
 
     public function getXdrDiscriminator(): int|bool|XdrEnum
@@ -91,13 +94,13 @@ class ExampleUnion implements XdrUnion
         return $this->value;
     }
 
-    public function getXdrValueType(): string
+    public static function getXdrDiscriminatedValueType(int|bool|XdrEnum $discriminator): string
     {
-        if (array_key_exists($this->selection, array_keys($this->arms))) {
-            return $this->arms[$this->selection];
+        if ($discriminator instanceof XdrEnum) {
+            $discriminator = $discriminator->getXdrValue();
         }
 
-        return $this->arms[self::DEFAULT];
+        return self::getXdrArms()[$discriminator];
     }
 
     public function getXdrValueLength(): ?int
@@ -105,13 +108,8 @@ class ExampleUnion implements XdrUnion
         return null;
     }
 
-    public static function newFromXdr(int|bool|XdrEnum $discriminator): static
+    public static function newFromXdr(int|bool|XdrEnum $discriminator, mixed $value): static
     {
-        return new static($discriminator);
-    }
-
-    public function setValueFromXdr(int|bool|XdrEnum $discriminator, mixed $value): void
-    {
-        $this->value = $value;
+        return new static($discriminator, $value);
     }
 }
