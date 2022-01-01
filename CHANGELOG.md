@@ -2,6 +2,16 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.8 - 2021-12-31
+
+### Removed
+
+- Removed `setValueFromXdr()` method from the `XdrUnion` interface. This method felt redundant from a usability perspective though it had a good technical reason to be there.
+
+### Added
+
+- Added a new static `getXdrArms` method to the `XdrUnion` interface. This will ensure that we can determine the union's value type without having to instantiate an empty class ahead of time. Going forward all union arms will have to be defined statically, which is probably for the best.
+
 ## 0.0.7 - 2021-12-18
 
 ### Added
@@ -29,7 +39,7 @@ All notable changes to `phpxdr` will be documented in this file
 
 ### Changed
 
-- Adjusted the `XdrOptional` interface to hopefully be more intuitive.  Removed references to "evaluation" in favor of "hasValue".
+- Adjusted the `XdrOptional` interface to hopefully be more intuitive. Removed references to "evaluation" in favor of "hasValue".
 
 ## 0.0.3 - 2021-11-28
 

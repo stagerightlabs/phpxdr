@@ -430,15 +430,20 @@ trait Write
         }
 
         // Write the discriminator
-        $this->write($value->getXdrDiscriminator(), $value->getXdrDiscriminatorType());
+        $discriminator = $value->getXdrDiscriminator();
+        $this->write($discriminator, $value->getXdrDiscriminatorType());
 
         // Ensure a value content type has been provided
-        if (!$value->getXdrValueType()) {
+        if (!$value->getXdrDiscriminatedValueType($discriminator)) {
             throw new InvalidArgumentException('Invalid union content specified');
         }
 
         // Write the value content
-        $this->write($value->getXdrValue(), $value->getXdrValueType(), $value->getXdrValueLength());
+        $this->write(
+            $value->getXdrValue(),
+            $value->getXdrDiscriminatedValueType($discriminator),
+            $value->getXdrValueLength()
+        );
 
         return $this;
     }
