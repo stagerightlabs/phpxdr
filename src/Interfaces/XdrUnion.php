@@ -38,13 +38,6 @@ interface XdrUnion
     public static function getXdrArms(): array;
 
     /**
-     * Retrieve the selected value to be encoded as XDR bytes.
-     *
-     * @return int
-     */
-    public function getXdrValue(): mixed;
-
-    /**
      * Retrieve the encoding type for a given discriminator.
      *
      * @return string
@@ -56,7 +49,14 @@ interface XdrUnion
      *
      * @return int|null
      */
-    public function getXdrValueLength(): ?int;
+    public static function getXdrDiscriminatedValueLength(int|bool|XdrEnum $discriminator): ?int;
+
+    /**
+     * Retrieve the selected value to be encoded as XDR bytes.
+     *
+     * @return int
+     */
+    public function getXdrValue(): mixed;
 
     /**
      * Create a new instance of this class from XDR.

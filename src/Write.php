@@ -442,7 +442,7 @@ trait Write
         $this->write(
             $value->getXdrValue(),
             $value->getXdrDiscriminatedValueType($discriminator),
-            $value->getXdrValueLength()
+            $value->getXdrDiscriminatedValueLength($discriminator)
         );
 
         return $this;
