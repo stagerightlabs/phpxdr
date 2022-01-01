@@ -2,6 +2,12 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.9 - 2022-01-01
+
+### Changed
+
+- The previous update did not account for unions that represent fixed length values.  The `XdrUnion` interface has been altered so that fixed lengths are now also defined statically and will be looked up by discriminator.
+
 ## 0.0.8 - 2021-12-31
 
 ### Removed

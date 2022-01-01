@@ -442,9 +442,12 @@ trait Read
             throw new InvalidArgumentException("Class '{$vessel}' does not implement the XdrUnion interface.");
         }
 
-        // Read the discriminator
+        // Read the discriminator and the value
         $discriminator = $this->read($vessel::getXdrDiscriminatorType());
-        $value = $this->read($vessel::getXdrDiscriminatedValueType($discriminator));
+        $value = $this->read(
+            $vessel::getXdrDiscriminatedValueType($discriminator),
+            length: $vessel::getXdrDiscriminatedValueLength($discriminator)
+        );
 
         // Instantiate the vessel
         return $vessel::newFromXdr($discriminator, $value);
