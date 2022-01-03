@@ -64,7 +64,7 @@ class ExampleArrayVariable implements XdrArray
         return $this->arr;
     }
 
-    public static function getXdrFixedCount(): ?int
+    public static function getXdrLength(): ?int
     {
         return null;
     }

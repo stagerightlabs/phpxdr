@@ -19,13 +19,13 @@ interface XdrArray
     public function getXdrArray(): array;
 
     /**
-     * If this class is modeling a fixed length array, this method defines
-     * the number of elements the array is expected to contain. This will
-     * be null for variable length arrays.
+     * If this class is modeling a fixed length array use this method
+     * to define the number of elements the array is expected to
+     * contain. This will be null for variable length arrays.
      *
      * @return integer
      */
-    public static function getXdrFixedCount(): ?int;
+    public static function getXdrLength(): ?int;
 
     /**
      * XDR arrays must be composed entirely of the same type. This method
@@ -36,8 +36,7 @@ interface XdrArray
     public static function getXdrType(): string;
 
     /**
-     * If the underlying content type requires a length it can be specified
-     * with this method.
+     * Specify the length of the underlying value type, if required.
      *
      * @return integer|null
      */
