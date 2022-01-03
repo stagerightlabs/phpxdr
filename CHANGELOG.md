@@ -2,6 +2,12 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.10 - 2022-01-03
+
+### Changed
+
+- The `getXdrFixedCount()` method in the `XdrArray` interface has been renamed to `getXdrLength()` which should hopefully be more clear.
+
 ## 0.0.9 - 2022-01-01
 
 ### Changed

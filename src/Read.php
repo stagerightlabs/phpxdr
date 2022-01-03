@@ -38,12 +38,12 @@ trait Read
         }
 
         // Can we infer that this is a fixed length array?
-        if (class_exists($type) && $this->isInstanceOf($type, XdrArray::class) && $type::getXdrFixedCount()) {
+        if (class_exists($type) && $this->isInstanceOf($type, XdrArray::class) && $type::getXdrLength()) {
             return $this->readArrayFixed($type, $length);
         }
 
         // Can we infer that this is a variable length array?
-        if (class_exists($type) && $this->isInstanceOf($type, XdrArray::class) && !$type::getXdrFixedCount()) {
+        if (class_exists($type) && $this->isInstanceOf($type, XdrArray::class) && !$type::getXdrLength()) {
             return $this->readArrayVariable($type);
         }
 
@@ -359,7 +359,7 @@ trait Read
         }
 
         // Determine the number of elements in our fixed length array
-        $length = $length ?? $vessel::getXdrFixedCount();
+        $length = $length ?? $vessel::getXdrLength();
         if (!$length) {
             throw new InvalidArgumentException('Attempting to decode a fixed length array with no specified length');
         }

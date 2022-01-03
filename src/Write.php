@@ -38,12 +38,12 @@ trait Write
         }
 
         // Can we infer that this is a fixed array?
-        if ($value instanceof XdrArray && $value->getXdrFixedCount()) {
-            return $this->writeArrayFixed($value, $value->getXdrFixedCount());
+        if ($value instanceof XdrArray && $value->getXdrLength()) {
+            return $this->writeArrayFixed($value, $value->getXdrLength());
         }
 
         // Can we infer that this is a variable length array?
-        if ($value instanceof XdrArray && !$value->getXdrFixedCount()) {
+        if ($value instanceof XdrArray && !$value->getXdrLength()) {
             return $this->writeArrayVariable($value);
         }
 
@@ -356,7 +356,7 @@ trait Write
      */
     protected function writeArrayFixed(XdrArray $value, $length = null): self
     {
-        $count = $length ?? $value->getXdrFixedCount();
+        $count = $length ?? $value->getXdrLength();
         if (!$count) {
             throw new InvalidArgumentException('You must specify a length to encode a fixed array.');
         }
