@@ -367,7 +367,7 @@ trait Read
         // Decode the array
         $arr = [];
         for ($i = 0; $i < $length; $i++) {
-            $arr[] = $this->read($vessel::getXdrType(), $vessel::getXdrTypeLength());
+            $arr[] = $this->read($vessel::getXdrType(), length: $vessel::getXdrTypeLength());
         }
 
         // Return a newly instantiated vessel class
@@ -397,7 +397,7 @@ trait Read
         // Decode the array
         $arr = [];
         for ($i = 0; $i < $count; $i++) {
-            $arr[] = $this->read($vessel::getXdrType(), $vessel::getXdrTypeLength());
+            $arr[] = $this->read($vessel::getXdrType(), length: $vessel::getXdrTypeLength());
         }
 
         // Return a newly instantiated vessel class

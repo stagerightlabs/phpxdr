@@ -2,6 +2,16 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.11 - 2022-01-03
+
+### Added
+
+- Added more test coverage for the `XdrArray` interface methods.
+
+### Changed
+
+- Fixed a bug that prevented fixed length arrays from being read correctly.
+
 ## 0.0.10 - 2022-01-03
 
 ### Changed
