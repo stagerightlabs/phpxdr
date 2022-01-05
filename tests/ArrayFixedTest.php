@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use InvalidArgumentException;
 use StageRightLabs\PhpXdr\XDR;
 use PHPUnit\Framework\TestCase;
 use StageRightLabs\PhpXdr\Interfaces\XdrArray;
