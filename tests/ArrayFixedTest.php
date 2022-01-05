@@ -33,6 +33,22 @@ class ArrayFixedTest extends TestCase
     }
 
     /** @test */
+    public function it_rejects_fixed_length_arrays_that_are_longer_than_the_defined_length()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $arr = new ExampleArrayFixed([1, 2, 3]);
+        XDR::fresh()->write($arr)->buffer();
+    }
+
+    /** @test */
+    public function it_rejects_fixed_length_arrays_that_are_shorter_than_the_defined_length()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $arr = new ExampleArrayFixed([1]);
+        XDR::fresh()->write($arr)->buffer();
+    }
+
+    /** @test */
     public function it_encodes_fixed_length_arrays_with_values_of_different_lengths()
     {
         $arr = new ExampleFixedStringArray(['one', 'two', 'three']);
