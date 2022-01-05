@@ -2,6 +2,12 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.12 - 2022-01-04
+
+### Changed
+
+- Encoding Fixed length arrays will now throw an error exception if the array count does not exactly match the defined fixed length.
+
 ## 0.0.11 - 2022-01-03
 
 ### Added

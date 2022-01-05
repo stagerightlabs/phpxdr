@@ -356,15 +356,17 @@ trait Write
      */
     protected function writeArrayFixed(XdrArray $value, $length = null): self
     {
-        $count = $length ?? $value->getXdrLength();
-        if (!$count) {
+        $length = $length ?? $value->getXdrLength();
+        if (!$length) {
             throw new InvalidArgumentException('You must specify a length to encode a fixed array.');
         }
 
         $arr = $value->getXdrArray();
+        $count = count($arr);
 
-        if (count($arr) > $count) {
-            throw new InvalidArgumentException('Attempting to encode an array that is longer than the specified length.');
+        if ($count != $length) {
+            $class = get_class($value);
+            throw new InvalidArgumentException("The {$class} instance requires {$length} elements but contains {$count}");
         }
 
         foreach ($arr as $child) {

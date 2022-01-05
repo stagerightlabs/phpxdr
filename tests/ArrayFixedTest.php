@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use InvalidArgumentException;
 use StageRightLabs\PhpXdr\XDR;
 use PHPUnit\Framework\TestCase;
 use StageRightLabs\PhpXdr\Interfaces\XdrArray;
@@ -30,6 +31,22 @@ class ArrayFixedTest extends TestCase
         $arr = new ExampleArrayFixed([1, 2]);
         $buffer = XDR::fresh()->write($arr)->buffer();
         $this->assertEquals('0000000100000002', bin2hex($buffer));
+    }
+
+    /** @test */
+    public function it_rejects_fixed_length_arrays_that_are_longer_than_the_defined_length()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $arr = new ExampleArrayFixed([1, 2, 3]);
+        XDR::fresh()->write($arr)->buffer();
+    }
+
+    /** @test */
+    public function it_rejects_fixed_length_arrays_that_are_shorter_than_the_defined_length()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $arr = new ExampleArrayFixed([1]);
+        XDR::fresh()->write($arr)->buffer();
     }
 
     /** @test */
