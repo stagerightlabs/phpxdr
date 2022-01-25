@@ -2,6 +2,12 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.13 - 2022-01-24
+
+### Changed
+
+- Altered the `XdrEnum` interface: `getXdrValue` is now `getXdrSelection` And `isValidXdrValue` is now `isValidXdrSelection`.
+
 ## 0.0.12 - 2022-01-04
 
 ### Changed

@@ -29,7 +29,7 @@ class ReadTest extends TestCase
         // enum
         $enum = $xdr->read(XDR::ENUM, ExampleEnum::class);
         $this->assertInstanceOf(ExampleEnum::class, $enum);
-        $this->assertEquals($enum->getXdrValue(), ExampleEnum::FOO);
+        $this->assertEquals($enum->getXdrSelection(), ExampleEnum::FOO);
 
         // bool
         $bool = $xdr->read(XDR::BOOL);

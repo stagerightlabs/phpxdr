@@ -16,7 +16,7 @@ interface XdrEnum
      *
      * @return integer
      */
-    public function getXdrValue(): int;
+    public function getXdrSelection(): int;
 
     /**
      * Create a new instance of this class from XDR.
@@ -32,5 +32,5 @@ interface XdrEnum
      * @param integer $value
      * @return boolean
      */
-    public function isValidXdrValue(int $value): bool;
+    public function isValidXdrSelection(int $value): bool;
 }
