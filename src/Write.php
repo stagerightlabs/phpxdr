@@ -166,9 +166,9 @@ trait Write
      */
     protected function writeEnum(XdrEnum $value): self
     {
-        $int = $value->getXdrValue();
+        $int = $value->getXdrSelection();
 
-        if ($value->isValidXdrValue($int)) {
+        if ($value->isValidXdrSelection($int)) {
             return $this->writeInt($int);
         }
 

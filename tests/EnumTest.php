@@ -49,7 +49,7 @@ class EnumTest extends TestCase
         $enum = XDR::fromHex('00000014')->read(XDR::ENUM, ExampleEnum::class);
         $this->assertInstanceOf(XdrEnum::class, $enum);
         $this->assertInstanceOf(ExampleEnum::class, $enum);
-        $this->assertEquals(ExampleEnum::BAR, $enum->getXdrValue());
+        $this->assertEquals(ExampleEnum::BAR, $enum->getXdrSelection());
     }
 
     /** @test */
@@ -58,7 +58,7 @@ class EnumTest extends TestCase
         $enum = XDR::fromHex('00000014')->read(ExampleEnum::class);
         $this->assertInstanceOf(XdrEnum::class, $enum);
         $this->assertInstanceOf(ExampleEnum::class, $enum);
-        $this->assertEquals(ExampleEnum::BAR, $enum->getXdrValue());
+        $this->assertEquals(ExampleEnum::BAR, $enum->getXdrSelection());
     }
 
     /** @test */
@@ -80,7 +80,7 @@ class ExampleEnum implements XdrEnum
         $this->selected = $selection;
     }
 
-    public function getXdrValue(): int
+    public function getXdrSelection(): int
     {
         return $this->selected;
     }
@@ -90,7 +90,7 @@ class ExampleEnum implements XdrEnum
         return new static($value);
     }
 
-    public function isValidXdrValue(int $value): bool
+    public function isValidXdrSelection(int $value): bool
     {
         return in_array($value, [
             self::FOO,
