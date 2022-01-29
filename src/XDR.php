@@ -84,7 +84,7 @@ final class XDR
      * @param string $bytes
      * @return static
      */
-    public static function fromBytes(string $bytes)
+    public static function fromBytes(string $bytes): static
     {
         return new static($bytes);
     }
@@ -94,7 +94,7 @@ final class XDR
      *
      * @return static
      */
-    public static function fromHex(string $hex)
+    public static function fromHex(string $hex): static
     {
         return self::fromBase16($hex);
     }
@@ -104,7 +104,7 @@ final class XDR
      *
      * @return static
      */
-    public static function fromBase16(string $hex)
+    public static function fromBase16(string $hex): static
     {
         $bin = hex2bin($hex);
 
@@ -121,7 +121,7 @@ final class XDR
      * @param string $buffer
      * @return static
      */
-    public static function fromBase64(string $buffer)
+    public static function fromBase64(string $buffer): static
     {
         return new static(base64_decode($buffer));
     }
@@ -131,7 +131,7 @@ final class XDR
      *
      * @return static
      */
-    public static function fresh()
+    public static function fresh(): static
     {
         return new static();
     }

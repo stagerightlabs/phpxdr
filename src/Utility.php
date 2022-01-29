@@ -21,7 +21,7 @@ trait Utility
      * @param int $direction
      * @return string
      */
-    public static function pad($bytes, $length = null, $char = null, $direction = STR_PAD_RIGHT)
+    public static function pad($bytes, $length = null, $char = null, $direction = STR_PAD_RIGHT): string
     {
         if (!$length) {
             $length = self::nextMultipleOfFour(strlen($bytes));
@@ -212,7 +212,7 @@ trait Utility
      * @param int $index
      * @return void
      */
-    protected function goto(int $index)
+    protected function goto(int $index): void
     {
         if ($index > $this->length()) {
             $index = $this->length();
@@ -231,7 +231,7 @@ trait Utility
      * @param int|null $count
      * @return void
      */
-    public function rewind(int $count = null)
+    public function rewind(int $count = null): void
     {
         if ($count) {
             $this->goto($this->cursor - $count);
@@ -246,7 +246,7 @@ trait Utility
      * @param integer|null $count
      * @return void
      */
-    public function advance(int $count = null)
+    public function advance(int $count = null): void
     {
         if ($count) {
             $this->goto($this->cursor + $count);
