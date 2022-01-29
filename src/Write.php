@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace StageRightLabs\PhpXdr;
 
 use InvalidArgumentException;
-use StageRightLabs\PhpXdr\Interfaces\XdrEnum;
 use StageRightLabs\PhpXdr\Interfaces\XdrArray;
-use StageRightLabs\PhpXdr\Interfaces\XdrUnion;
+use StageRightLabs\PhpXdr\Interfaces\XdrEnum;
+use StageRightLabs\PhpXdr\Interfaces\XdrOptional;
 use StageRightLabs\PhpXdr\Interfaces\XdrStruct;
 use StageRightLabs\PhpXdr\Interfaces\XdrTypedef;
-use StageRightLabs\PhpXdr\Interfaces\XdrOptional;
+use StageRightLabs\PhpXdr\Interfaces\XdrUnion;
+use StageRightLabs\PhpXdr\XDR;
 
 /**
  * The XDR encoder methods.
@@ -23,9 +24,9 @@ trait Write
      * @param mixed $value
      * @param string|null $type
      * @param int|null $length
-     * @return self
+     * @return XDR
      */
-    public function write($value, $type = null, $length = null)
+    public function write($value, $type = null, $length = null): XDR
     {
         // Is this a void value?
         if ($value === XDR::VOID) {
@@ -113,7 +114,7 @@ trait Write
      * @param string $bytes
      * @return void
      */
-    protected function append($bytes)
+    protected function append($bytes): void
     {
         $this->buffer .= $bytes;
     }
@@ -124,9 +125,9 @@ trait Write
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.1
      * @see https://github.com/zulucrypto/stellar-api/blob/master/src/Xdr/XdrEncoder.php#L70
      * @param int $value
-     * @return self
+     * @return XDR
      */
-    protected function writeInt(int $value): self
+    protected function writeInt(int $value): XDR
     {
         if ($value > 2147483647 || $value < -2147483647) {
             throw new InvalidArgumentException('Signed integer out of range.');
@@ -145,9 +146,9 @@ trait Write
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.2
      * @see https://github.com/zulucrypto/stellar-api/blob/master/src/Xdr/XdrEncoder.php#L70
      * @param int $value
-     * @return self
+     * @return XDR
      */
-    protected function writeUint(int $value): self
+    protected function writeUint(int $value): XDR
     {
         if ($value < 0 || $value > XDR::MAX_LENGTH) {
             throw new InvalidArgumentException('Unsigned integer out of range.');
@@ -162,9 +163,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.3
      * @param XdrEnum $value
-     * @return self
+     * @return XDR
      */
-    protected function writeEnum(XdrEnum $value): self
+    protected function writeEnum(XdrEnum $value): XDR
     {
         $int = $value->getXdrSelection();
 
@@ -180,9 +181,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.4
      * @param bool $value
-     * @return self
+     * @return XDR
      */
-    protected function writeBool(bool $value): self
+    protected function writeBool(bool $value): XDR
     {
         return $value ? $this->writeUint(1) : $this->writeUint(0);
     }
@@ -193,9 +194,9 @@ trait Write
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.5
      * @see https://github.com/zulucrypto/stellar-api/blob/master/src/Xdr/XdrEncoder.php#L83
      * @param int $value
-     * @return self
+     * @return XDR
      */
-    protected function writeHyperInt(int $value): self
+    protected function writeHyperInt(int $value): XDR
     {
         // These errors probably won't be thrown due to
         if ($value > PHP_INT_MAX) {
@@ -219,9 +220,9 @@ trait Write
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.5
      * @see https://github.com/zulucrypto/stellar-api/blob/master/src/Xdr/XdrEncoder.php#L70
      * @param int $value
-     * @return self
+     * @return XDR
      */
-    protected function writeHyperUInt(int $value): self
+    protected function writeHyperUInt(int $value): XDR
     {
         if ($value > PHP_INT_MAX) {
             throw new InvalidArgumentException('Attempting to encode a hyper unsigned integer that is larger than PHP_INT_MAX.');
@@ -241,9 +242,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.6
      * @param float $value
-     * @return self
+     * @return XDR
      */
-    protected function writeFloat(float $value): self
+    protected function writeFloat(float $value): XDR
     {
         if (!is_float($value)) {
             throw new InvalidArgumentException('Attempting to encode a non-float value as a float.');
@@ -263,9 +264,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.7
      * @param float $value
-     * @return self
+     * @return XDR
      */
-    protected function writeDouble(float $value): self
+    protected function writeDouble(float $value): XDR
     {
         if (!is_float($value)) {
             throw new InvalidArgumentException('Attempting to encode a non-float value as a float.');
@@ -288,9 +289,9 @@ trait Write
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.9
      * @param string $value
      * @param int|null $length
-     * @return self
+     * @return XDR
      */
-    protected function writeOpaqueFixed(string $value, int|null $length = null): self
+    protected function writeOpaqueFixed(string $value, int|null $length = null): XDR
     {
         if (!$length) {
             throw new InvalidArgumentException('You must specify a length to encode a fixed opaque value.');
@@ -312,9 +313,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.10
      * @param string $value
-     * @return self
+     * @return XDR
      */
-    protected function writeOpaqueVariable(string $value): self
+    protected function writeOpaqueVariable(string $value): XDR
     {
         if (strlen($value) > XDR::MAX_LENGTH) {
             throw new InvalidArgumentException('Attempting to encode an variable opaque value that is longer than allowed by the spec.');
@@ -331,9 +332,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.11
      * @param string $value
-     * @return self
+     * @return XDR
      */
-    protected function writeString(string $value): self
+    protected function writeString(string $value): XDR
     {
         if (strlen($value) > XDR::MAX_LENGTH) {
             throw new InvalidArgumentException('Attempting to encode a string that is longer than allowed by the spec.');
@@ -352,9 +353,9 @@ trait Write
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.12
      * @param XdrArray $value
      * @param int|null $length
-     * @return self
+     * @return XDR
      */
-    protected function writeArrayFixed(XdrArray $value, $length = null): self
+    protected function writeArrayFixed(XdrArray $value, $length = null): XDR
     {
         $length = $length ?? $value->getXdrLength();
         if (!$length) {
@@ -381,9 +382,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.13
      * @param XdrArray $value
-     * @return self
+     * @return XDR
      */
-    protected function writeArrayVariable(XdrArray $value): self
+    protected function writeArrayVariable(XdrArray $value): XDR
     {
         $arr = $value->getXdrArray();
         $count = count($arr);
@@ -408,9 +409,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.14
      * @param XdrStruct $value
-     * @return self
+     * @return XDR
      */
-    protected function writeStruct(XdrStruct $value): self
+    protected function writeStruct(XdrStruct $value): XDR
     {
         $value->toXdr($this);
 
@@ -422,9 +423,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.15
      * @param XdrUnion $value
-     * @return self
+     * @return XDR
      */
-    protected function writeUnion(XdrUnion $value): self
+    protected function writeUnion(XdrUnion $value): XDR
     {
         // Validate the discriminator type
         if ($this->isInvalidUnionDiscriminator($value->getXdrDiscriminatorType())) {
@@ -473,9 +474,9 @@ trait Write
      * Consider a 'void' value to be an empty string.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.16
-     * @return self
+     * @return XDR
      */
-    protected function writeVoid(): self
+    protected function writeVoid(): XDR
     {
         $this->append('');
 
@@ -487,9 +488,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.19
      * @param XdrOptional $value
-     * @return self
+     * @return XDR
      */
-    protected function writeOptional(XdrOptional $value): self
+    protected function writeOptional(XdrOptional $value): XDR
     {
         if ($value->hasValueForXdr()) {
             $this->write(true, XDR::BOOL)
@@ -507,9 +508,9 @@ trait Write
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.18
      * @param XdrTypedef $value
-     * @return self
+     * @return XDR
      */
-    protected function writeTypedef(XdrTypedef $value): self
+    protected function writeTypedef(XdrTypedef $value): XDR
     {
         $value->toXdr($this);
 

@@ -7,13 +7,20 @@ namespace StageRightLabs\PhpXdr;
 use UnexpectedValueException;
 
 /**
- * A tool for encoding and decoding XDR byte strings.
+ * A tool for encoding and decoding strings of bytes as XDR.
  */
 final class XDR
 {
+    /**
+     * Traits
+     */
     use Read;
     use Write;
     use Utility;
+
+    /**
+     * Type definitions
+     */
     public const INT = 'integer';
     public const UINT = 'unsigned_integer';
     public const ENUM = 'enumeration';
@@ -34,6 +41,9 @@ final class XDR
     public const OPTIONAL = 'optional';
     public const TYPEDEF = 'typedef';
 
+    /**
+     * Type length definitions
+     */
     public const INT_BYTE_LENGTH = 4;
     public const UINT_BYTE_LENGTH = 4;
     public const BOOL_BYTE_LENGTH = 4;
@@ -43,8 +53,14 @@ final class XDR
     public const FLOAT_BYTE_LENGTH = 4;
     public const DOUBLE_BYTE_LENGTH = 8;
 
+    /**
+     * Additional definitions
+     */
     public const MAX_LENGTH = 4294967295; // pow(2, 32) - 1
 
+    /**
+     * Properties
+     */
     protected string $buffer = '';
     protected int $cursor = 0;
     protected int $count = 0;
@@ -68,7 +84,7 @@ final class XDR
      * @param string $bytes
      * @return static
      */
-    public static function fromBytes(string $bytes)
+    public static function fromBytes(string $bytes): static
     {
         return new static($bytes);
     }
@@ -78,7 +94,7 @@ final class XDR
      *
      * @return static
      */
-    public static function fromHex(string $hex)
+    public static function fromHex(string $hex): static
     {
         return self::fromBase16($hex);
     }
@@ -88,7 +104,7 @@ final class XDR
      *
      * @return static
      */
-    public static function fromBase16(string $hex)
+    public static function fromBase16(string $hex): static
     {
         $bin = hex2bin($hex);
 
@@ -105,7 +121,7 @@ final class XDR
      * @param string $buffer
      * @return static
      */
-    public static function fromBase64(string $buffer)
+    public static function fromBase64(string $buffer): static
     {
         return new static(base64_decode($buffer));
     }
@@ -115,7 +131,7 @@ final class XDR
      *
      * @return static
      */
-    public static function fresh()
+    public static function fresh(): static
     {
         return new static();
     }
