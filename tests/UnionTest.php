@@ -111,7 +111,7 @@ class ExampleUnion implements XdrUnion
     public static function getXdrDiscriminatedValueType(int|bool|XdrEnum $discriminator): string
     {
         if ($discriminator instanceof XdrEnum) {
-            $discriminator = $discriminator->getXdrValue();
+            $discriminator = $discriminator->getXdrSelection();
         }
 
         return self::getXdrArms()[$discriminator];
