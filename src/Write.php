@@ -191,6 +191,10 @@ trait Write
     /**
      * Convert a HYPER_INT (int64) to encoded bytes.
      *
+     * Due to limitations of the language it is not possible for us to determine
+     * if the user is attempting to encode a number that is larger than
+     * PHP_INT_MAX or lower than PHP_INT_MIN. You have been warned.
+     *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.5
      * @see https://github.com/zulucrypto/stellar-api/blob/master/src/Xdr/XdrEncoder.php#L83
      * @param int $value
@@ -198,15 +202,6 @@ trait Write
      */
     protected function writeHyperInt(int $value): XDR
     {
-        // These errors probably won't be thrown due to
-        if ($value > PHP_INT_MAX) {
-            throw new InvalidArgumentException('Attempting to encode a hyper integer that is larger than PHP_INT_MAX.');
-        }
-
-        if ($value < PHP_INT_MIN) {
-            throw new InvalidArgumentException('Attempting to encode a hyper integer that is larger than PHP_INT_MAX.');
-        }
-
         $this->append(
             $this->isBigEndian() ? pack('q', $value) : strrev(pack('q', $value))
         );
@@ -217,6 +212,10 @@ trait Write
     /**
      * Convert a HYPER_UINT (uint64) to encoded bytes.
      *
+     * Due to limitations of the language it is not possible for us to determine
+     * if the user is attempting to encode a number that is larger than
+     * PHP_INT_MAX or lower than PHP_INT_MIN. You have been warned.
+     *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.5
      * @see https://github.com/zulucrypto/stellar-api/blob/master/src/Xdr/XdrEncoder.php#L70
      * @param int $value
@@ -224,10 +223,6 @@ trait Write
      */
     protected function writeHyperUInt(int $value): XDR
     {
-        if ($value > PHP_INT_MAX) {
-            throw new InvalidArgumentException('Attempting to encode a hyper unsigned integer that is larger than PHP_INT_MAX.');
-        }
-
         if ($value < 0) {
             throw new InvalidArgumentException('Attempting to encode a hyper unsigned integer that is less than zero.');
         }
@@ -240,20 +235,16 @@ trait Write
     /**
      * Convert a FLOAT value to encoded bytes.
      *
+     * Due to limitations of the language it is not possible for us to
+     * determine if the user is attempting to encode a float that
+     * is larger than PHP_FLOAT_MAX or lower than PHP_FLOAT_MIN.
+     *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.6
      * @param float $value
      * @return XDR
      */
     protected function writeFloat(float $value): XDR
     {
-        if (!is_float($value)) {
-            throw new InvalidArgumentException('Attempting to encode a non-float value as a float.');
-        }
-
-        if ($value > PHP_FLOAT_MAX) {
-            throw new InvalidArgumentException('Attempting to encode a float that is larger than PHP_FLOAT_MAX.');
-        }
-
         $this->append(pack('G', $value));
 
         return $this;
@@ -262,20 +253,16 @@ trait Write
     /**
      * Convert a DOUBLE precision float to encoded bytes.
      *
+     * Due to limitations of the language it is not possible for us to
+     * determine if the user is attempting to encode a float that
+     * is larger than PHP_FLOAT_MAX or lower than PHP_FLOAT_MIN.
+     *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.7
      * @param float $value
      * @return XDR
      */
     protected function writeDouble(float $value): XDR
     {
-        if (!is_float($value)) {
-            throw new InvalidArgumentException('Attempting to encode a non-float value as a float.');
-        }
-
-        if ($value > PHP_FLOAT_MAX) {
-            throw new InvalidArgumentException('Attempting to encode a double float that is larger than PHP_FLOAT_MAX.');
-        }
-
         $this->append(pack('E', $value));
 
         return $this;
@@ -358,9 +345,11 @@ trait Write
     protected function writeArrayFixed(XdrArray $value, $length = null): XDR
     {
         $length = $length ?? $value->getXdrLength();
-        if (!$length) {
-            throw new InvalidArgumentException('You must specify a length to encode a fixed array.');
-        }
+
+        // We can assume that a $length value will always be present.
+        // if (!$length) {
+        //     throw new InvalidArgumentException('You must specify a length to encode a fixed array.');
+        // }
 
         $arr = $value->getXdrArray();
         $count = count($arr);

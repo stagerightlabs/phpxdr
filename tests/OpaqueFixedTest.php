@@ -16,6 +16,20 @@ class OpaqueFixedTest extends TestCase
     }
 
     /** @test */
+    public function it_requires_a_length_to_encode_a_fixed_length_opaque_value()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        XDR::fresh()->write(hex2bin('12345678'), XDR::OPAQUE_FIXED);
+    }
+
+    /** @test */
+    public function it_rejects_opaque_values_that_exceed_the_specified_length()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        XDR::fresh()->write(hex2bin('aabbccddee'), XDR::OPAQUE_FIXED, 4);
+    }
+
+    /** @test */
     public function it_encodes_fixed_length_opaque_values_to_a_length_divisible_by_four()
     {
         $bytes = XDR::fresh()->write(hex2bin('12345678901234'), XDR::OPAQUE_FIXED, 7)->buffer();
