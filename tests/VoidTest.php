@@ -16,6 +16,14 @@ class EncodingVoidTest extends TestCase
     }
 
     /** @test */
+    public function it_encodes_void_values_with_the_long_syntax()
+    {
+        $bytes = XDR::fresh()->write(null, XDR::VOID)->buffer();
+        $this->assertEquals(0, strlen($bytes));
+        $this->assertEmpty($bytes);
+    }
+
+    /** @test */
     public function it_decodes_void_values()
     {
         $void = XDR::fromHex('')->read(XDR::VOID);

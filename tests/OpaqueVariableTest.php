@@ -19,17 +19,13 @@ class OpaqueVariableTest extends TestCase
         $this->assertEquals(hex2bin('000000071234567890123400'), $bytes);
     }
 
-    /**
-     * This test uses a lot of memory; I am going to leave it commented out.
-     * There may be a better way to do this.
-     * @test
-     */
-    // public function it_does_not_encode_opaque_values_longer_than_the_spec_limit()
-    // {
-    //     $this->expectException(InvalidArgumentException::class);
-    //     $value = str_repeat('1', pow(2, 32));
-    //     XDR::encodeOpaqueVariable($value);
-    // }
+    /** @test */
+    public function it_does_not_encode_opaque_values_longer_than_the_spec_limit()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $value = str_repeat('1', pow(2, 32));
+        XDR::fresh()->write($value, XDR::OPAQUE_VARIABLE)->buffer();
+    }
 
     /** @test */
     public function it_decodes_variable_length_opaque_bytes()

@@ -20,6 +20,14 @@ class StringTest extends TestCase
     }
 
     /** @test */
+    public function it_does_not_encode_strings_longer_than_the_spec_limit()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $value = str_repeat('1', pow(2, 32));
+        XDR::fresh()->write($value, XDR::STRING)->buffer();
+    }
+
+    /** @test */
     public function it_decodes_string_values()
     {
         $string = XDR::fromHex('0000000441424344')->read(XDR::STRING);
