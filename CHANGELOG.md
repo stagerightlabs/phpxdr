@@ -2,6 +2,19 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.14 - 2022-01-31
+
+## Added
+
+- Added test coverage generation to the PHPUnit configuration.  Requires xdebug or PCOV.
+- Added some additional test coverage.
+
+## Changed
+
+- The method return types have been tweaked a bit to hopefully improve IDE introspection and code coverage.
+- Fixed a bug in a Union test that had previously been missed.
+
+
 ## 0.0.13 - 2022-01-24
 
 ### Changed
