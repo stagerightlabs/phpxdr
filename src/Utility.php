@@ -145,7 +145,7 @@ trait Utility
     }
 
     /**
-     * Retrieve the first element of an array or throw an exception.
+     * Return the first element of an array or throw an exception.
      *
      * @param mixed[]|bool|null $arr
      * @param string $message
@@ -167,7 +167,7 @@ trait Utility
     }
 
     /**
-     * Retrieve the content of the buffer.
+     * Return the buffer.
      *
      * @return string
      */
@@ -187,7 +187,7 @@ trait Utility
     }
 
     /**
-     * Retrieve the current length of the buffer.
+     * Return the current length of the buffer.
      *
      * @return integer
      */

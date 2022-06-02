@@ -19,14 +19,14 @@ interface XdrOptional
     public function hasValueForXdr(): bool;
 
     /**
-     * Retrieve the selected value to be encoded as XDR bytes.
+     * Return the selected value to be encoded as XDR bytes.
      *
      * @return integer
      */
     public function getXdrValue(): mixed;
 
     /**
-     * Retrieve the desired encoding type for the selected value, specified
+     * Return the desired encoding type for the selected value, specified
      * using the XDR type constants.
      *
      * @return string

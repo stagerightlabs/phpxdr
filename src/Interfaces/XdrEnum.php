@@ -12,7 +12,7 @@ namespace StageRightLabs\PhpXdr\Interfaces;
 interface XdrEnum
 {
     /**
-     * Retrieve the value to be encoded as XDR bytes.
+     * Return the value to be encoded as XDR bytes.
      *
      * @return integer
      */

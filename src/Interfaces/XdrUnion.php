@@ -15,7 +15,7 @@ use StageRightLabs\PhpXdr\Interfaces\XdrEnum;
 interface XdrUnion
 {
     /**
-     * Retrieve the discriminator value.
+     * Return the discriminator value.
      *
      * @return int
      */
@@ -31,14 +31,14 @@ interface XdrUnion
     public static function getXdrDiscriminatorType(): string;
 
     /**
-     * Retrieve the 'arms' that have been defined in this union.
+     * Return the 'arms' that have been defined in this union.
      *
      * @return array<int|bool|string, string>
      */
     public static function getXdrArms(): array;
 
     /**
-     * Retrieve the encoding type for a given discriminator.
+     * Return the encoding type for a given discriminator.
      *
      * @return string
      */
@@ -52,7 +52,7 @@ interface XdrUnion
     public static function getXdrDiscriminatedValueLength(int|bool|XdrEnum $discriminator): ?int;
 
     /**
-     * Retrieve the selected value to be encoded as XDR bytes.
+     * Return the selected value to be encoded as XDR bytes.
      *
      * @return int
      */
