@@ -145,6 +145,16 @@ trait Utility
     }
 
     /**
+     * Return the buffer as a string of raw bytes.
+     *
+     * @return string
+     */
+    public function toBytes(): string
+    {
+        return $this->buffer();
+    }
+
+    /**
      * Return the first element of an array or throw an exception.
      *
      * @param mixed[]|bool|null $arr

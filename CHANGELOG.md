@@ -2,6 +2,16 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.0.15 - 2022-06-01
+
+## Added
+
+- Added a `toBytes()` convenience method for returning buffer contents as a string of raw bytes.
+
+## Changed
+
+- Adjusted interface class doc-blocks: 'Retrieve' is now 'Return'
+
 ## 0.0.14 - 2022-01-31
 
 ## Added
