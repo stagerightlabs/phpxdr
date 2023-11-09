@@ -2,6 +2,10 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.01.00 - 2023-11-09
+
+- Breaking change: altered the `XdrUnion` interface; hopefully it is now easier to understand and use.
+
 ## 0.0.15 - 2022-06-01
 
 ## Added

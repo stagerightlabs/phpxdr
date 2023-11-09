@@ -22,7 +22,7 @@ interface XdrTypedef
     public function toXdr(XDR &$xdr): void;
 
     /**
-     * Create a new instance of this class by reading from XDR.
+     * Allow the XDR reader to create a new instance of this class.
      *
      * @param XDR $xdr
      * @return static

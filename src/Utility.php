@@ -101,7 +101,7 @@ trait Utility
     }
 
     /**
-     * Is a given named class not an instance of a given named interface?
+     * Is a named class not an instance of a given interface?
      *
      * The opposite of 'isInstanceOf()'.
      *

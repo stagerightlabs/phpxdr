@@ -112,11 +112,13 @@ trait Write
      * Append to the buffer.
      *
      * @param string $bytes
-     * @return void
+     * @return XDR
      */
-    protected function append($bytes): void
+    protected function append($bytes): XDR
     {
         $this->buffer .= $bytes;
+
+        return $this;
     }
 
     /**
@@ -129,15 +131,13 @@ trait Write
      */
     protected function writeInt(int $value): XDR
     {
-        if ($value > 2147483647 || $value < -2147483647) {
+        if ($value > XDR::INT_MAX || $value < XDR::INT_MIN) {
             throw new InvalidArgumentException('Signed integer out of range.');
         }
 
-        $this->append(
+        return $this->append(
             $this->isBigEndian() ? pack('l', $value) : strrev(pack('l', $value))
         );
-
-        return $this;
     }
 
     /**
@@ -154,8 +154,7 @@ trait Write
             throw new InvalidArgumentException('Unsigned integer out of range.');
         }
 
-        $this->append(pack('N', $value));
-        return $this;
+        return $this->append(pack('N', $value));
     }
 
     /**
@@ -202,11 +201,9 @@ trait Write
      */
     protected function writeHyperInt(int $value): XDR
     {
-        $this->append(
+        return $this->append(
             $this->isBigEndian() ? pack('q', $value) : strrev(pack('q', $value))
         );
-
-        return $this;
     }
 
     /**
@@ -227,9 +224,7 @@ trait Write
             throw new InvalidArgumentException('Attempting to encode a hyper unsigned integer that is less than zero.');
         }
 
-        $this->append(pack('J', $value));
-
-        return $this;
+        return $this->append(pack('J', $value));
     }
 
     /**
@@ -245,9 +240,7 @@ trait Write
      */
     protected function writeFloat(float $value): XDR
     {
-        $this->append(pack('G', $value));
-
-        return $this;
+        return $this->append(pack('G', $value));
     }
 
     /**
@@ -263,9 +256,7 @@ trait Write
      */
     protected function writeDouble(float $value): XDR
     {
-        $this->append(pack('E', $value));
-
-        return $this;
+        return $this->append(pack('E', $value));
     }
 
     /**
@@ -288,9 +279,7 @@ trait Write
             throw new InvalidArgumentException('Attempting to encode an opaque value that is too long.');
         }
 
-        $this->append($this->pad($value, $length));
-
-        return $this;
+        return $this->append($this->pad($value, $length));
     }
 
     /**
@@ -309,9 +298,8 @@ trait Write
         }
 
         $this->write(strlen($value), XDR::UINT);
-        $this->append($this->pad($value));
 
-        return $this;
+        return $this->append($this->pad($value));
     }
 
     /**
@@ -338,6 +326,7 @@ trait Write
      * rather than the overall byte length of the object.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.12
+     * @throws InvalidArgumentException
      * @param XdrArray $value
      * @param int|null $length
      * @return XDR
@@ -345,12 +334,6 @@ trait Write
     protected function writeArrayFixed(XdrArray $value, $length = null): XDR
     {
         $length = $length ?? $value->getXdrLength();
-
-        // We can assume that a $length value will always be present.
-        // if (!$length) {
-        //     throw new InvalidArgumentException('You must specify a length to encode a fixed array.');
-        // }
-
         $arr = $value->getXdrArray();
         $count = count($arr);
 
@@ -411,33 +394,34 @@ trait Write
      * Convert a union to encoded bytes.
      *
      * @see https://datatracker.ietf.org/doc/html/rfc4506.html#section-4.15
+     * @throws InvalidArgumentException
      * @param XdrUnion $value
      * @return XDR
      */
     protected function writeUnion(XdrUnion $value): XDR
     {
-        // Validate the discriminator type
+        // Fetch the discriminator
+        $discriminator = $value->getXdrDiscriminator();
+
+        // Check the discriminator type
         if ($this->isInvalidUnionDiscriminator($value->getXdrDiscriminatorType())) {
-            throw new InvalidArgumentException('Attempting to use an invalid value as union discriminator.');
+            throw new InvalidArgumentException("Invalid union discriminator: '{$value->getXdrDiscriminatorType()}'");
+        }
+
+        // Ensure a content type has been provided
+        if (!$value->getXdrType($discriminator)) {
+            throw new InvalidArgumentException('No union content value provided');
         }
 
         // Write the discriminator
-        $discriminator = $value->getXdrDiscriminator();
         $this->write($discriminator, $value->getXdrDiscriminatorType());
 
-        // Ensure a value content type has been provided
-        if (!$value->getXdrDiscriminatedValueType($discriminator)) {
-            throw new InvalidArgumentException('Invalid union content specified');
-        }
-
         // Write the value content
-        $this->write(
-            $value->getXdrValue(),
-            $value->getXdrDiscriminatedValueType($discriminator),
-            $value->getXdrDiscriminatedValueLength($discriminator)
+        return $this->write(
+            value: $value->getXdrValue(),
+            type: $value->getXdrType($discriminator),
+            length: $value->getXdrLength($discriminator)
         );
-
-        return $this;
     }
 
     /**
@@ -467,9 +451,7 @@ trait Write
      */
     protected function writeVoid(): XDR
     {
-        $this->append('');
-
-        return $this;
+        return $this->append('');
     }
 
     /**

@@ -445,8 +445,8 @@ trait Read
         // Read the discriminator and the value
         $discriminator = $this->read($vessel::getXdrDiscriminatorType());
         $value = $this->read(
-            $vessel::getXdrDiscriminatedValueType($discriminator),
-            length: $vessel::getXdrDiscriminatedValueLength($discriminator)
+            $vessel::getXdrType($discriminator),
+            length: $vessel::getXdrLength($discriminator)
         );
 
         // Instantiate the vessel

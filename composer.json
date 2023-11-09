@@ -36,7 +36,8 @@
     },
     "scripts": {
         "format": "php-cs-fixer fix src --rules=@PSR12",
-        "phpstan": "phpstan analyse -l 9 src"
+        "phpstan": "phpstan analyse -l 9 src",
+        "test": "vendor/bin/phpunit"
     },
     "config": {
         "sort-packages": true
