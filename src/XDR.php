@@ -44,6 +44,8 @@ final class XDR
     public const DOUBLE_BYTE_LENGTH = 8;
 
     public const MAX_LENGTH = 4294967295; // pow(2, 32) - 1
+    public const INT_MAX = 2147483647;
+    public const INT_MIN = -2147483647;
 
     protected string $buffer = '';
     protected int $cursor = 0;

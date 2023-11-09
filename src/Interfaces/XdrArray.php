@@ -43,7 +43,7 @@ interface XdrArray
     public static function getXdrTypeLength(): ?int;
 
     /**
-     * Create a new instance of this class from XDR.
+     * Allow the XDR reader to create a new instance of this class.
      *
      * @param mixed[] $arr
      * @return static

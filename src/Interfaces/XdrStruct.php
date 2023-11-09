@@ -21,8 +21,8 @@ interface XdrStruct
     public function toXdr(XDR &$xdr): void;
 
     /**
-     * Create a new instance of this class from XDR. The implementing class
-     * is responsible for decoding bytes using the provided $xdr instance.
+     * Allow the XDR reader to create a new instance of this class.
+     * The implementing class must hydrate itself by reading bytes from $xdr.
      *
      * @param XDR $xdr
      * @return static

@@ -73,34 +73,31 @@ class ExampleUnion implements XdrUnion
     const DEFAULT = 20;
     const ARRAY_FIXED_LENGTH = 2;
 
-    public function __construct(
-        public ?int $selection = 20,
-        public mixed $value = null
-    ) {
-        $this->selection = $selection ?? self::DEFAULT;
+    protected static $arms =  [
+        10 => XDR::STRING,
+        20 => XDR::INT,
+        30 => ExampleArrayFixed::class,
+    ];
 
-        if ($value) {
-            $this->value = $value;
-        }
+    public function __construct(protected int $discriminator, protected mixed $value)
+    {
+        //
     }
 
-    public static function getXdrArms(): array
+    public function unwrap(): int|string|ExampleArrayFixed
     {
-        return [
-            10 => XDR::STRING,
-            20 => XDR::INT,
-            30 => ExampleArrayFixed::class,
-        ];
+        return $this->getXdrValue();
+    }
+
+    /////////////////////////  Interface Methods //////////////////////////////
+    public static function getXdrDiscriminatorType(): string
+    {
+        return XDR::INT;
     }
 
     public function getXdrDiscriminator(): int|bool|XdrEnum
     {
-        return $this->selection;
-    }
-
-    public static function getXdrDiscriminatorType(): string
-    {
-        return XDR::INT;
+        return $this->discriminator;
     }
 
     public function getXdrValue(): mixed
@@ -108,18 +105,18 @@ class ExampleUnion implements XdrUnion
         return $this->value;
     }
 
-    public static function getXdrDiscriminatedValueType(int|bool|XdrEnum $discriminator): string
+    public static function getXdrType(int|bool|XdrEnum $discriminator): string
     {
         if ($discriminator instanceof XdrEnum) {
             $discriminator = $discriminator->getXdrSelection();
         }
 
-        return self::getXdrArms()[$discriminator];
+        return self::$arms[$discriminator];
     }
 
-    public static function getXdrDiscriminatedValueLength(int|bool|XdrEnum $discriminator): ?int
+    public static function getXdrLength(int|bool|XdrEnum $discriminator): ?int
     {
-        if (self::getXdrDiscriminatedValueType($discriminator) == XDR::ARRAY_FIXED) {
+        if (self::getXdrType($discriminator) == XDR::ARRAY_FIXED) {
             return self::ARRAY_FIXED_LENGTH;
         }
 

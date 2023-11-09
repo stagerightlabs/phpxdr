@@ -15,13 +15,6 @@ use StageRightLabs\PhpXdr\Interfaces\XdrEnum;
 interface XdrUnion
 {
     /**
-     * Return the discriminator value.
-     *
-     * @return int
-     */
-    public function getXdrDiscriminator(): int|bool|XdrEnum;
-
-    /**
      * What type of discriminator is being used in this union?
      * Allowed types are XDR::INT, XDR::UINT, XDR::BOOL or
      * the name of a class that implements XdrEnum.
@@ -31,25 +24,25 @@ interface XdrUnion
     public static function getXdrDiscriminatorType(): string;
 
     /**
-     * Return the 'arms' that have been defined in this union.
+     * Return the discriminator value.
      *
-     * @return array<int|bool|string, string>
+     * @return int
      */
-    public static function getXdrArms(): array;
+    public function getXdrDiscriminator(): int|bool|XdrEnum;
 
     /**
      * Return the encoding type for a given discriminator.
      *
      * @return string
      */
-    public static function getXdrDiscriminatedValueType(int|bool|XdrEnum $discriminator): string;
+    public static function getXdrType(int|bool|XdrEnum $discriminator): string;
 
     /**
      * If the value type requires a designated length specify it here.
      *
      * @return int|null
      */
-    public static function getXdrDiscriminatedValueLength(int|bool|XdrEnum $discriminator): ?int;
+    public static function getXdrLength(int|bool|XdrEnum $discriminator): ?int;
 
     /**
      * Return the selected value to be encoded as XDR bytes.
@@ -59,7 +52,7 @@ interface XdrUnion
     public function getXdrValue(): mixed;
 
     /**
-     * Create a new instance of this class from XDR.
+     * Allow the XDR reader to create a new instance of this class.
      *
      * @param int|bool|XdrEnum $discriminator
      * @param mixed $value

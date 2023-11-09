@@ -41,7 +41,7 @@ interface XdrOptional
     public static function getXdrValueLength(): ?int;
 
     /**
-     * Create a new instance of this class from XDR.
+     * Allow the XDR reader to create a new instance of this class.
      *
      * @param bool $hasValue
      * @param mixed $value
