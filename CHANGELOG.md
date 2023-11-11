@@ -2,7 +2,15 @@
 
 All notable changes to `phpxdr` will be documented in this file
 
+## 0.01.01 - 2023-11-10
+
+### Removed
+
+- Removed redundant doc block return types from interface definitions.
+
 ## 0.01.00 - 2023-11-09
+
+## Changed
 
 - Breaking change: altered the `XdrUnion` interface; hopefully it is now easier to understand and use.
 
