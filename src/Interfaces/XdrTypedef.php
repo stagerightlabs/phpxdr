@@ -15,17 +15,11 @@ interface XdrTypedef
 {
     /**
      * Write this object to XDR
-     *
-     * @param XDR $xdr
-     * @return void
      */
     public function toXdr(XDR &$xdr): void;
 
     /**
      * Allow the XDR reader to create a new instance of this class.
-     *
-     * @param XDR $xdr
-     * @return static
      */
     public static function newFromXdr(XDR &$xdr): static;
 }
